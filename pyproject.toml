@@ -61,10 +61,14 @@ test = ["pytest>=7.0"]
 [project.scripts]
 spend-guard = "spend_guard.cli:main"
 
-# No [project.urls] yet. A Homepage/Repository/Issues URL is a promise that
-# something answers at the other end; this source tree has not been published,
-# so every one of them would 404. They go in with the first public release,
-# not before.
+# A Homepage/Repository/Issues URL is a promise that something answers at the
+# other end. These went in with the first public release, not before; the slug
+# matches the distribution name so the badge, the metadata and the package
+# cannot drift apart.
+[project.urls]
+Homepage = "https://github.com/edusouzaxGV/spend-guard"
+Repository = "https://github.com/edusouzaxGV/spend-guard"
+Issues = "https://github.com/edusouzaxGV/spend-guard/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["spend_guard"]

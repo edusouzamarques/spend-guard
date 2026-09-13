@@ -52,19 +52,39 @@ def test_the_install_instructions_do_not_point_at_an_unpublished_name():
     assert "Not on PyPI yet" in README
 
 
-def test_no_badge_asserts_a_build_status_that_never_ran():
-    """A CI badge on an unpushed repository renders broken and claims nothing."""
-    assert "badge.svg" not in README
-    assert "actions/workflows" not in README
+def test_the_ci_badge_points_at_a_workflow_file_that_exists():
+    """A badge is only evidence if it reports on a workflow that really runs.
+
+    The badge URL and the workflow path are written in two different files, so
+    renaming the workflow is exactly the kind of change that leaves a green
+    badge reporting on nothing. Derive the path from the badge and look for it.
+    """
+    badge = re.search(
+        r"actions/workflows/([\w.-]+)/badge\.svg",
+        README,
+    )
+    assert badge is not None, "README has no CI badge"
+    assert (ROOT / ".github" / "workflows" / badge.group(1)).is_file()
 
 
-def test_project_metadata_declares_no_url_that_does_not_resolve():
-    """Homepage/Repository/Issues are promises that something answers."""
-    declarations = [
-        line for line in PYPROJECT.splitlines() if not line.lstrip().startswith("#")
-    ]
-    assert not any(line.strip() == "[project.urls]" for line in declarations)
-    assert not any("github.com" in line for line in declarations)
+def test_every_github_url_points_at_one_repository_named_after_the_distribution():
+    """Badge, metadata and package name are three places one slug is written.
+
+    A typo in any of them 404s, and the mismatch that matters - a badge
+    reporting on a different repository than the one the metadata links to - is
+    invisible on the page because a broken badge and a missing run look alike.
+    """
+    distribution = re.search(r'^name = "([^"]+)"', PYPROJECT, re.M).group(1)
+    owner_repo = {
+        match.group(1)
+        for text in (README, PYPROJECT)
+        for match in re.finditer(r"github\.com/([\w.-]+/[\w.-]+)", text)
+    }
+
+    assert owner_repo == {f"edusouzaxGV/{distribution}"}, (
+        f"expected every github.com URL to name edusouzaxGV/{distribution}, "
+        f"found {sorted(owner_repo)}"
+    )
 
 
 def test_the_keywords_do_not_claim_a_scope_the_readme_disclaims():

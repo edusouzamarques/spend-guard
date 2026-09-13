@@ -1,0 +1,16 @@
+{
+  "currency": "USD",
+  "period": { "kind": "monthly", "anchor_day": 1 },
+  "ceiling": "1200.00",
+  "warn_threshold": "0.80",
+  "allow_uncategorised": false,
+  "rollover": { "policy": "carry_unused", "cap": "200.00" },
+  "categories": {
+    "text": { "ceiling": "250.00" },
+    "speech": { "ceiling": "150.00" },
+    "images": { "ceiling": "100.00" },
+    "video": { "ceiling": "300.00" },
+    "compute": { "ceiling": "250.00", "warn_threshold": "0.90" },
+    "storage": { "ceiling": "100.00" }
+  }
+}

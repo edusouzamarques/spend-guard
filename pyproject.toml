@@ -1,0 +1,84 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "spend-guard"
+version = "0.1.0"
+description = "Hard budget ceilings for AI and cloud spend that fail closed: declared budgets, a reserve/commit/release protocol, an append-only ledger, and an unknown price that blocks instead of passing as free."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+authors = [{ name = "Eduardo de Souza Marques" }]
+maintainers = [{ name = "Eduardo de Souza Marques" }]
+# Deliberately no "rate-limiting" or "quota": this caps money, not concurrency
+# and not requests per second. Matching a search for those would be a lie the
+# README then has to spend a paragraph taking back.
+keywords = [
+    "budget",
+    "cost-control",
+    "spend",
+    "guardrail",
+    "llm",
+    "finops",
+    "circuit-breaker",
+    "ledger",
+    "ndjson",
+    "reservation",
+    "fail-closed",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Office/Business :: Financial :: Accounting",
+    "Topic :: System :: Monitoring",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[project.optional-dependencies]
+# The core has no runtime dependencies. Budgets and price tables load from JSON
+# with the standard library alone; these extras only add file formats, and the
+# package degrades with a named error rather than an ImportError when one is
+# missing.
+toml = ["tomli>=1.1.0; python_version < '3.11'"]
+yaml = ["PyYAML>=5.1"]
+test = ["pytest>=7.0"]
+
+[project.scripts]
+spend-guard = "spend_guard.cli:main"
+
+# No [project.urls] yet. A Homepage/Repository/Issues URL is a promise that
+# something answers at the other end; this source tree has not been published,
+# so every one of them would 404. They go in with the first public release,
+# not before.
+
+[tool.hatch.build.targets.wheel]
+packages = ["spend_guard"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/spend_guard",
+    "/tests",
+    "/examples",
+    "/README.md",
+    "/PROVENANCE.md",
+    "/LICENSE",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

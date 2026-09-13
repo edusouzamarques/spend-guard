@@ -489,7 +489,13 @@ def test_repair_apply_recovers_a_ledger_with_a_duplicate_sequence(base, files, c
     lines = path.read_text(encoding="utf-8").splitlines()
     # What a writer numbering from a stale count leaves behind.
     lines[1] = lines[1].replace('"seq":2', '"seq":1')
-    path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="")
+    # open(newline="") rather than write_text(newline=""): the keyword only
+    # reached Path.write_text in 3.10, and this package supports 3.9. It is
+    # needed either way - the default would translate these \n into \r\n on
+    # Windows and the ledger would no longer be the byte-exact NDJSON the
+    # reader parses.
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        handle.write("\n".join(lines) + "\n")
     assert run(["status"] + base, capsys)[0] == EXIT_ERROR
 
     code, out, _ = run(["repair", "--apply"] + base, capsys)

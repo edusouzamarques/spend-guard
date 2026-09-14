@@ -1,6 +1,6 @@
 # spend-guard
 
-[![CI](https://github.com/edusouzaxGV/spend-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/edusouzaxGV/spend-guard/actions/workflows/ci.yml)
+[![CI](https://github.com/edusouzamarques/spend-guard/actions/workflows/ci.yml/badge.svg)](https://github.com/edusouzamarques/spend-guard/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue.svg)](./pyproject.toml)
 
